@@ -1,14 +1,27 @@
 # Flags
 CC = g++
 CFLAGS = -Wall -g
+
+# File names
+SOCKET = socket_rw
+A429 = a429_lib
+PLANE = plane
+
+# Object files
+OBJS = main.o $(SOCKET).o $(A429).o $(PLANE).o
  
-# Targets 
-main: main.o Point.o Square.o
-    $(CC) $(CFLAGS) -o main main.o Point.o Square.o
+# Targets
+main: $(OBJS)
+    $(CC) $(CFLAGS) -o main $(OBJS)
  
-main.o: main.cpp Point.h Square.h
+main.o: main.cpp $(SOCKET).h $(A429).h $(PLANE).h
     $(CC) $(CFLAGS) -c main.cpp
  
-Point.o: Point.h
+$(SOCKET).o: $(SOCKET).cpp $(SOCKET).h
+    $(CC) $(CFLAGS) -c $(SOCKET).cpp
  
-Square.o: Square.h Point.h
+$(A429).o: $(A429).cpp $(A429).h
+    $(CC) $(CFLAGS) -c $(A429).cpp
+
+$(PLANE).o: $(PLANE).cpp $(PLANE).h
+    $(CC) $(CFLAGS) -c $(PLANE).cpp
