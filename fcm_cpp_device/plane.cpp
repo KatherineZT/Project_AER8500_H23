@@ -1,5 +1,4 @@
 #include "plane.h"
-#include <math.h>
 
 /** PLANE CLASS
  *  Holds the state of the plane

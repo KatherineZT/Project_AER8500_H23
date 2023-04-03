@@ -1,6 +1,4 @@
 #include "refresher.h"
-#include <signal.h>
-#include <time.h>
 
 // Set the refresh rate of the system in nsec
 const unsigned long Refresher::INTERVAL_NS = 1000000;

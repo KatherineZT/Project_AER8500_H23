@@ -11,7 +11,22 @@
 int main(int argc, char const* argv[]) {
 
     Plane* planeState = new Plane();
-    Refresher* periodicUpdater = new Refresher(planeState);
+    SocketRW* socket_1 = new SocketRW();
+    Refresher* periodicUpdater = new Refresher(planeState, socket_1);
+    bool isRunning = true;
+
+    char requests[1024] = {0};
+
+    while (isRunning) 
+    {
+        requests = socket_1->sread();
+
+        if (requests)
+        {
+            for (int itr = 0; )
+        }
+        
+    }
 
     delete periodicUpdater;
     return 0;

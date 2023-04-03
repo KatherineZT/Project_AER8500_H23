@@ -1,3 +1,5 @@
+#include <math.h>
+
 enum State {
     Ground = 0,
     Climbing = 1,

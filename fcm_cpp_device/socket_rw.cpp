@@ -1,11 +1,5 @@
 // Server side C/C++ program to demonstrate Socket
 // programming
-#include <netinet/in.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
 #include "socket_rw.h"
 
 #define PORT 8080
@@ -38,7 +32,7 @@ SocketRW::SocketRW() {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
-    if (listen(server_fd, 3) < 0) {
+    if (listen(server_fd, 5) < 0) {
         perror("listen");
         exit(EXIT_FAILURE);
     }
@@ -49,11 +43,13 @@ SocketRW::SocketRW() {
         perror("accept");
         exit(EXIT_FAILURE);
     }
+
+    ioctl(new_socket, FIONBIO, &opt);
 }
 
 char* SocketRW::sread() {
-    char buffer[1024] = {0};
-    read(new_socket, buffer, 1024);
+    memset(buffer, 0, sizeof(buffer));
+    read(new_socket, buffer, 1024); //we expect to receive in hex format: "0FA600FF 4E9F020A"
     return buffer;
 }
 

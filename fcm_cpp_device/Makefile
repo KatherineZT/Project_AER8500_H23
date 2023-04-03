@@ -6,22 +6,29 @@ CFLAGS = -Wall -g
 SOCKET = socket_rw
 A429 = a429_lib
 PLANE = plane
+REFRESHER = refresher
 
 # Object files
-OBJS = main.o $(SOCKET).o $(A429).o $(PLANE).o
+OBJS = main.o $(SOCKET).o $(A429).o $(PLANE).o $(REFRESHER).o
  
 # Targets
-main: $(OBJS)
-    $(CC) $(CFLAGS) -o main $(OBJS)
+main: $(OBJS) 
+	$(CC) $(CFLAGS) -o main $(OBJS)
  
-main.o: main.cpp $(SOCKET).h $(A429).h $(PLANE).h
-    $(CC) $(CFLAGS) -c main.cpp
+main.o: main.cpp $(SOCKET).h $(A429).h $(PLANE).h 
+	$(CC) $(CFLAGS) -c main.cpp
  
-$(SOCKET).o: $(SOCKET).cpp $(SOCKET).h
-    $(CC) $(CFLAGS) -c $(SOCKET).cpp
+$(SOCKET).o: $(SOCKET).cpp $(SOCKET).h 
+	$(CC) $(CFLAGS) -c $(SOCKET).cpp
  
-$(A429).o: $(A429).cpp $(A429).h
-    $(CC) $(CFLAGS) -c $(A429).cpp
+$(A429).o: $(A429).cpp $(A429).h 
+	$(CC) $(CFLAGS) -c $(A429).cpp
 
-$(PLANE).o: $(PLANE).cpp $(PLANE).h
-    $(CC) $(CFLAGS) -c $(PLANE).cpp
+$(PLANE).o: $(PLANE).cpp $(PLANE).h 
+	$(CC) $(CFLAGS) -c $(PLANE).cpp
+
+$(REFRESHER).o: $(REFRESHER).cpp $(REFRESHER).h
+	$(CC) $(CFLAGS) -c $(REFRESHER).cpp
+	
+clean : 
+	rm main $(OBJS)
