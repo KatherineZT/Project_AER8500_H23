@@ -8,4 +8,9 @@ project ("CMakeProjectAER")
 # Add source to this project's executable.
 add_executable (CMakeProjectAER "main.cpp" "a429_lib.cpp" "a429_lib.h" "plane.cpp" "plane.h" "refresher.cpp" "refresher.h" "socket_rw.cpp" "socket_rw.h")
 
+find_library(LIBRT rt) 
+if(LIBRT)
+target_link_libraries(CMakeProjectAER ${LIBRT})
+endif()
+
 # TODO: Add tests and install targets if needed.

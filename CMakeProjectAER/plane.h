@@ -1,4 +1,7 @@
 #include <math.h>
+#include <stdio.h>
+
+#pragma once
 
 enum State {
     Ground = 0,
@@ -21,8 +24,8 @@ class Plane {
     void setState(State newState);
     // For GUI
     int  getAltitude();
-    float  getClimbingSpeed();
-    float  getMotorPower();
+    float getClimbingSpeed();
+    float getMotorPower();
     State getState();
   private:
     int   altitude;

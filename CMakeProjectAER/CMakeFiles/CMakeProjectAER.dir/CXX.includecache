@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/a429_lib.cpp
+a429_lib.h
+/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/a429_lib.h
+iostream
+-
+
+/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/a429_lib.h
+math.h
+-
+stdio.h
+-
+string.h
+-
+

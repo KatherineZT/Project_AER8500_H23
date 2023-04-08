@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#pragma once
+
 struct a429_request {
     int label;
     float data1;

@@ -51,7 +51,6 @@ Plane::Plane() {
 
 void Plane::update(unsigned long refreshRate) {
     //1st step: check if target altitude reached
-    
     int previousAltitude = this->altitude;
     //2nd step: with speed, update altitude
     float speedInFeetPerSec = (this->climbingSpeed / SECONDS_PER_MIN) * FEET_PER_METER;
@@ -64,18 +63,6 @@ void Plane::update(unsigned long refreshRate) {
 
 void Plane::setNewAltitudeTarget(int newAltitude) {
     this->targetAltitude = newAltitude;
-}
-
-void Plane::setNewSpeedTarget(float newSpeed) {
-    this->targetClimbingSpeed = newSpeed;
-}
-
-void Plane::setNewAngleTarget(float newAngle) {
-    this->targetAngleOfAttack = newAngle;
-}
-
-void Plane::setNewMotorSpeedTarget(float newSpeed) {
-    this->targetMotorSpeed = newSpeed;
 }
 
 void Plane::setAltitude(int newAltitude) {
@@ -100,4 +87,20 @@ void Plane::setMotorPower(int newPower) {
 void Plane::setState(State newState) {
     this->state = newState;
     // update speed and angle
+}
+
+int Plane::getAltitude() {
+    return this->altitude;
+}
+
+float Plane::getClimbingSpeed() {
+    return this->climbingSpeed;
+}
+
+float Plane::getMotorPower() {
+    return this->motorPower;
+}
+
+State Plane::getState(){
+    return this->state;
 }

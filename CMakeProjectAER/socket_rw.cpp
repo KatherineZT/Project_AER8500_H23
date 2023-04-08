@@ -25,7 +25,8 @@ SocketRW::SocketRW() {
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
-  
+
+    printf("Socket created and attached to port 8080.\n");
     // Forcefully attaching socket to the port 8080
     if (bind(server_fd, (struct sockaddr*)&address,
              sizeof(address))
@@ -44,7 +45,7 @@ SocketRW::SocketRW() {
         perror("accept");
         exit(EXIT_FAILURE);
     }
-
+    printf("Socket found match!\n");
     ioctl(new_socket, FIONBIO, &opt);
 }
 

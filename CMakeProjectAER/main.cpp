@@ -9,18 +9,16 @@
  */
 
 int main(int argc, char const* argv[]) {
-
+    printf("Start\n");
     Plane* planeState = new Plane();
     SocketRW* socket_1 = new SocketRW();
     Refresher* periodicUpdater = new Refresher(planeState, socket_1);
     bool isRunning = true;
-
     void* requests;
-
+    printf("Init done\n");
     while (isRunning) 
     {
         requests = socket_1->sread();
-
         if (requests)
         {
             a429_request* requestsPtr = (a429_request*)(requests);
@@ -30,13 +28,13 @@ int main(int argc, char const* argv[]) {
                         planeState->setNewAltitudeTarget(requestsPtr[itr].data2);
                         break;
                     case 2:
-                        planeState->setNewSpeedTarget(requestsPtr[itr].data1);
+                        planeState->setClimbingSpeed(requestsPtr[itr].data1);
                         break;
                     case 3:
-                        planeState->setNewAngleTarget(requestsPtr[itr].data1);
+                        planeState->setAngle(requestsPtr[itr].data1);
                         break;
                     case 4:
-                        planeState->setNewMotorSpeedTarget(requestsPtr[itr].data1);
+                        planeState->setMotorPower(requestsPtr[itr].data1);
                         break;
                     default:
                         break;
@@ -45,7 +43,7 @@ int main(int argc, char const* argv[]) {
         }
         
     }
-
+    printf("App done\n");
     delete periodicUpdater;
     return 0;
 }

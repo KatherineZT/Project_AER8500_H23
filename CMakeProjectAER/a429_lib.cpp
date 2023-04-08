@@ -30,21 +30,42 @@ a429_request* A429::translateReceive(char* data)
                 receiveRequest[requestIndex].data1 = ((data_bits >> 10) & 0x3);
                 receiveRequest[requestIndex].data2 = decodeAltitude((data_bits >> 12) & 0xFFFF);
                 receiveRequest[requestIndex].ssm = ((data_bits >> 29) & 0x3);
+                printf("%i\n", receiveRequest[requestIndex].label);
+                printf("%lu\n", data_bits);
+                printf("%f\n", receiveRequest[requestIndex].data1);
+                printf("%f\n", receiveRequest[requestIndex].data2);
+                printf("%i\n", receiveRequest[requestIndex].ssm);
+                printf("\n");
                 break;
             case 64: //002
                 receiveRequest[requestIndex].label = 2;
                 receiveRequest[requestIndex].data1 = decodeClimbingRate(data_bits >> 10);
                 receiveRequest[requestIndex].ssm = ((data_bits >> 29) & 0x3);
+                printf("%i\n", receiveRequest[requestIndex].label);
+                printf("%lu\n", data_bits);
+                printf("%f\n", receiveRequest[requestIndex].data1);
+                printf("%i\n", receiveRequest[requestIndex].ssm);
+                printf("\n");
                 break;
             case 192: //003
                 receiveRequest[requestIndex].label = 3;
                 receiveRequest[requestIndex].data1 = decodeAngle((data_bits >> 10) & 0x3);
                 receiveRequest[requestIndex].ssm = ((data_bits >> 29) & 0x3);
+                printf("%i\n", receiveRequest[requestIndex].label);
+                printf("%lu\n", data_bits);
+                printf("%f\n", receiveRequest[requestIndex].data1);
+                printf("%i\n", receiveRequest[requestIndex].ssm);
+                printf("\n");
                 break;
             case 32: //004
                 receiveRequest[requestIndex].label = 4;
                 receiveRequest[requestIndex].data1 = decodeMotorSpeed((data_bits >> 20) & 0x3);
                 receiveRequest[requestIndex].ssm = ((data_bits >> 29) & 0x3);
+                printf("%i\n", receiveRequest[requestIndex].label);
+                printf("%lu\n", data_bits);
+                printf("%f\n", receiveRequest[requestIndex].data1);
+                printf("%i\n", receiveRequest[requestIndex].ssm);
+                printf("\n");
                 break;
             default:
                 receiveRequest[requestIndex].label = -1;
@@ -69,10 +90,10 @@ float A429::decodeAngle(int bits) {
 float A429::decodeClimbingRate(int bits) {
     // cent diza unit deci
     float number = 0;
-    number += 100*((bits >> 16) & 0xF);
-    number += 10*((bits >> 12) & 0xF);
-    number += 1*((bits >> 8) & 0xF);
-    number += 0.1*((bits >> 4) & 0xF);
+    number += 100*((bits >> 12) & 0xF);
+    number += 10*((bits >> 8) & 0xF);
+    number += 1*((bits >> 4) & 0xF);
+    number += 0.1*((bits) & 0xF);
     return number;
 }
 
@@ -128,32 +149,30 @@ unsigned int A429::encodeClimbingRate(float num)  {
 
     int val = int(num / 100);
     float tmpNum = num - 100*val;
-    bits |= (val << 16);
+    bits |= (val << 12);
 
     val = int(tmpNum / 10);
     tmpNum -= val * 10;
-    bits |= (int(val) << 12);
+    bits |= (int(val) << 8);
 
     val = int(tmpNum);
     tmpNum -= val;
-    bits |= (int(val) << 8);
+    bits |= (int(val) << 4);
 
     val = int(tmpNum*10);
     tmpNum -= val * 0.1;
-    bits |= (int(val) << 4);
+    bits |= (int(val));
     
     return bits << 10;
 }
 
 unsigned int A429::encodeParity(unsigned int num)  {
     unsigned int nbBits = 0;
-
     for (int itr = 0; itr < 32; itr++) {
-        if ((num << itr) & 1) nbBits++;
+        if ((num >> itr) & 1) nbBits++;
     }
-
-    if (nbBits % 2) return (1 << 31);
-    else return (0 << 31);
+    if (nbBits % 2) return (0 << 31);
+    else return (1 << 31);
 }
 
 char* A429::translateSend(a429_request request)

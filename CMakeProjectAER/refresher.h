@@ -8,11 +8,12 @@ class Refresher {
   public:
     Refresher(Plane* planeState, SocketRW* sender);
     ~Refresher();
-  private:
     void   UpdatePlane(unsigned long refreshRate);
+    static const unsigned long INTERVAL;
+  private:
     void   StartPeriodicTimer();
-    void   TimerThread(union sigval arg);
     SocketRW* sender;
     Plane* planeState;
-    static const unsigned long INTERVAL_NS;
 };
+
+void TimerThread(union sigval arg);
