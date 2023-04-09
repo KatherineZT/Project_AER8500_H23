@@ -13,7 +13,7 @@ class SocketRW {
   public:
     SocketRW();
     a429_request* sread();
-    void supdate(int altitude, float climbingSpeed, int state);
+    void supdate(int altitude, float climbingSpeed, float MotorPower, int state);
     void Close();
   private:
     int server_fd, new_socket;

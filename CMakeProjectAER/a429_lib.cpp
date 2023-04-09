@@ -49,17 +49,7 @@ a429_request* A429::translateReceive(char* data)
                 break;
             case 192: //003
                 receiveRequest[requestIndex].label = 3;
-                receiveRequest[requestIndex].data1 = decodeAngle((data_bits >> 10) & 0x3);
-                receiveRequest[requestIndex].ssm = ((data_bits >> 29) & 0x3);
-                printf("%i\n", receiveRequest[requestIndex].label);
-                printf("%lu\n", data_bits);
-                printf("%f\n", receiveRequest[requestIndex].data1);
-                printf("%i\n", receiveRequest[requestIndex].ssm);
-                printf("\n");
-                break;
-            case 32: //004
-                receiveRequest[requestIndex].label = 4;
-                receiveRequest[requestIndex].data1 = decodeMotorSpeed((data_bits >> 20) & 0x3);
+                receiveRequest[requestIndex].data1 = decodeAngle((data_bits >> 10));
                 receiveRequest[requestIndex].ssm = ((data_bits >> 29) & 0x3);
                 printf("%i\n", receiveRequest[requestIndex].label);
                 printf("%lu\n", data_bits);
@@ -81,16 +71,17 @@ a429_request* A429::translateReceive(char* data)
 float A429::decodeAngle(int bits) {
     // diza unit deci spare
     float number = 0;
-    number += 10*((bits >> 16) & 0xF);
+    number += 10*((bits >> 16) & 0x7);
     number += 1*((bits >> 12) & 0xF);
     number += 0.1*((bits >> 8) & 0xF);
+    printf("%f", number);
     return number;
 }
 
 float A429::decodeClimbingRate(int bits) {
     // cent diza unit deci
     float number = 0;
-    number += 100*((bits >> 12) & 0xF);
+    number += 100*((bits >> 12) & 0x7);
     number += 10*((bits >> 8) & 0xF);
     number += 1*((bits >> 4) & 0xF);
     number += 0.1*((bits) & 0xF);
@@ -118,28 +109,31 @@ float A429::decodeAltitude(int bits) {
     return number;
 }
 
-float A429::decodeMotorSpeed(int bits) {
-    float number = 0;
-    number += 64 * ((bits >> 6) & 1);
-    number += 32 * ((bits >> 5) & 1);
-    number += 16 * ((bits >> 4) & 1);
-    number += 8 * ((bits >> 3) & 1);
-    number += 4 * ((bits >> 2) & 1);
-    number += 2 * ((bits >> 1) & 1);
-    number += 1 * ((bits) & 1);
-    return number;
+unsigned int A429::encodeMotorPower(float num) {
+
+    unsigned int bits = 0;
+    int currPrecision = 0x40;
+
+    while (currPrecision >= 1) {
+        if (currPrecision < num) {
+            num -= currPrecision;
+            currPrecision = currPrecision >> 1;
+        }
+        currPrecision /= 2;
+    }
+    return bits << 21;
 }
 
 unsigned int A429::encodeAltitude(float num)  {
     unsigned int bits = 0;
-    int currPrecision = 32768;
+    int currPrecision = 0x8000;
 
-    while (currPrecision > 1) {
+    while (currPrecision >= 1) {
         if (currPrecision < num) {
             num -= currPrecision;
             bits |= currPrecision;
         }
-        currPrecision /= 2;
+        currPrecision = currPrecision >> 1;
     }
     return bits << 12;
 }
@@ -195,11 +189,16 @@ char* A429::translateSend(a429_request request)
             bits |= (1 << 6);
             bits |= encodeParity(bits);
             break;
+        case 4:
+            bits |= (request.ssm << 29);
+            bits |= encodeMotorPower(request.data1);
+            bits |= (1 << 5);
+            bits |= encodeParity(bits);
+            break;
         default:
             bits |= 0xFFFFFFFF;
             break;
     }
-
     sprintf(sendRequest, "%X", bits);
     return sendRequest;
 }

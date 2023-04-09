@@ -1,6 +1,10 @@
 // Server side C/C++ program to demonstrate Socket
 // programming
 #include "socket_rw.h"
+#include <chrono>
+#include <thread>
+using namespace std::this_thread;
+using namespace std::chrono;
 
 #define PORT 8080
 
@@ -55,9 +59,10 @@ a429_request* SocketRW::sread() {
     return translator->translateReceive(buffer);
 }
 
-void SocketRW::supdate(int altitude, float climbingSpeed, int state) {
+void SocketRW::supdate(int altitude, float climbingSpeed,  float MotorPower, int state) {
     a429_request state_altitude;
     a429_request climbing;
+    a429_request motorpower;
 
     char* packet;
 
@@ -68,7 +73,7 @@ void SocketRW::supdate(int altitude, float climbingSpeed, int state) {
 
     climbing.label = 2;
     if (climbingSpeed < 0) {
-        climbing.data1 = climbingSpeed;
+        climbing.data1 = -1 * climbingSpeed;
         climbing.ssm = 0;
     }
     else {
@@ -76,10 +81,17 @@ void SocketRW::supdate(int altitude, float climbingSpeed, int state) {
         climbing.ssm = 3;
     }
 
+    motorpower.label = 4;
+    motorpower.data1 = MotorPower;
+    motorpower.ssm = 3;
+
     packet = translator->translateSend(state_altitude);
     send(new_socket, packet, strlen(packet), 0);
-
+    sleep_for(nanoseconds(100));
     packet = translator->translateSend(climbing);
+    send(new_socket, packet, strlen(packet), 0);
+    sleep_for(nanoseconds(100));
+    packet = translator->translateSend(motorpower);
     send(new_socket, packet, strlen(packet), 0);
 }
 

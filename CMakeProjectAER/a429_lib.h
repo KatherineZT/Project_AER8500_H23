@@ -22,7 +22,7 @@ class A429 {
     float decodeAltitude(int bits);
     float decodeClimbingRate(int bits);
     float decodeAngle(int bits);
-    float decodeMotorSpeed(int bits);
+    unsigned int encodeMotorPower(float num);
     unsigned int encodeParity(unsigned int num);
     unsigned int encodeAltitude(float num);
     unsigned int encodeClimbingRate(float num);

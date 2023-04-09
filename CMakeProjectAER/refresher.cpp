@@ -15,7 +15,7 @@ Refresher::~Refresher() {
 void Refresher::UpdatePlane(unsigned long refreshRate) {
     this->planeState->update(refreshRate);
     // Update GUI as well
-    this->sender->supdate(this->planeState->getAltitude(), this->planeState->getClimbingSpeed(), static_cast<int>(this->planeState->getState()));
+    this->sender->supdate(this->planeState->getAltitude(), this->planeState->getClimbingSpeed(), this->planeState->getMotorPower(), static_cast<int>(this->planeState->getState()));
 }
 
 void Refresher::StartPeriodicTimer() {
