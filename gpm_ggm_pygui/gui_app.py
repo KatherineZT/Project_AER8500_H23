@@ -1,7 +1,5 @@
 import PySimpleGUI as sg
 from socket_rw import *
-import time as time
-import _thread
 
 def error_message():
     sg.Popup("Error! Check your values...", keep_on_top=True)
@@ -21,13 +19,6 @@ margins = (50, 50)
 target_altitude = 0
 target_climbing_speed = 0
 angle = 0
-
-# In parameters
-altitude = 0
-climbing_speed = 0
-motor_power = 0
-
-start_time = 0
 
 # Window layout
 layout = [
@@ -64,22 +55,22 @@ layout = [
     [
         sg.Column([
             [sg.Text('Altitude')],
-            [sg.Text('300', size=(7, 1), text_color='gray', background_color='light gray'), sg.Text('ft')]
+            [sg.Text('0', size=(7, 1), text_color='gray', background_color='light gray', key = 'alt'), sg.Text('ft')]
         ], element_justification='c'),
         sg.Column([
             [sg.Text('Climb Rate')],
-            [sg.Text('10', size=(7, 1), text_color='gray', background_color='light gray'), sg.Text('m/min')]
+            [sg.Text('0.0', size=(7, 1), text_color='gray', background_color='light gray', key = 'clb'), sg.Text('m/min')]
         ], element_justification='c'),
         sg.Column([
             [sg.Text('Motor Power')],
-            [sg.Text('30', size=(7, 1), text_color='gray', background_color='light gray'), sg.Text('%')]
+            [sg.Text('0', size=(7, 1), text_color='gray', background_color='light gray', key = 'mtr'), sg.Text('%')]
         ], element_justification='c')
     ],
     [
         sg.Text()
     ],
     [
-        sg.Text('CHANGEMENT_ALT', font=("Consolas", 13), background_color='green')
+        sg.Text('AU_SOL', font=("Consolas", 13), background_color='green', key = 'sta')
     ],
     [
         sg.Text()
@@ -99,12 +90,6 @@ window.find_element(2).Update(0)
 
 # Init connection to calculator
 init_socket()
-
-current_time = 0
-paused = False
-start_time = int(round(time.time() * 100))
-
-#_thread.start_new_thread( update_value, (window, ) )
 
 # Create an event loop
 while True:
@@ -128,29 +113,27 @@ while True:
 
         elif(tmp_altitude == 0):
             if (tmp_climb_speed != target_climbing_speed and tmp_climb_speed <= 800 and tmp_climb_speed >= -800 and \
-                ((tmp_climb_speed >= 0 and angle >= 0) or (tmp_climb_speed < 0 and angle < 0))):    
-                send_cmd(2, tmp_climb_speed)
-                tmp_climb_speed = target_climbing_speed
+                ((tmp_climb_speed >= 0 and tmp_angle >= 0) or (tmp_climb_speed < 0 and tmp_angle < 0))):    
+                if (tmp_angle != angle and tmp_angle <= 16 and tmp_angle >= -16 and \
+                    ((tmp_angle >= 0 and tmp_climb_speed >= 0) or (tmp_angle < 0 and tmp_climb_speed < 0))):
+                    send_cmd(2, tmp_climb_speed)
+                    send_cmd(3, tmp_angle)
+                    tmp_climb_speed = target_climbing_speed
+                    tmp_angle = angle
+                else:
+                    error = True
             else:
                 error = True
 
-            if (tmp_angle != angle and tmp_angle <= 16 and tmp_angle >= -16 and \
-                ((tmp_angle >= 0 and target_climbing_speed >= 0) or (tmp_angle < 0 and target_climbing_speed < 0))):
-                send_cmd(3, tmp_angle)
-                tmp_angle = angle
-            else:
-                error = True
         else:
             error = True
-        print("hi")
+
         if error : 
             error_message()
-
-    new_data = recv_cmd()
+    else :
+        new_data = recv_cmd(window)
 
     if event == "OK" or event == sg.WIN_CLOSED:
         break
-    
-
 
 window.close()

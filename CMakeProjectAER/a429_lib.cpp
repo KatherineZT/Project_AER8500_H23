@@ -74,14 +74,13 @@ float A429::decodeAngle(int bits) {
     number += 10*((bits >> 16) & 0x7);
     number += 1*((bits >> 12) & 0xF);
     number += 0.1*((bits >> 8) & 0xF);
-    printf("%f", number);
     return number;
 }
 
 float A429::decodeClimbingRate(int bits) {
     // cent diza unit deci
     float number = 0;
-    number += 100*((bits >> 12) & 0x7);
+    number += 100*((bits >> 12) & 0xF);
     number += 10*((bits >> 8) & 0xF);
     number += 1*((bits >> 4) & 0xF);
     number += 0.1*((bits) & 0xF);
@@ -115,11 +114,11 @@ unsigned int A429::encodeMotorPower(float num) {
     int currPrecision = 0x40;
 
     while (currPrecision >= 1) {
-        if (currPrecision < num) {
+        if (currPrecision <= num) {
             num -= currPrecision;
-            currPrecision = currPrecision >> 1;
+            bits |= currPrecision;
         }
-        currPrecision /= 2;
+        currPrecision = currPrecision >> 1;
     }
     return bits << 21;
 }
@@ -129,7 +128,7 @@ unsigned int A429::encodeAltitude(float num)  {
     int currPrecision = 0x8000;
 
     while (currPrecision >= 1) {
-        if (currPrecision < num) {
+        if (currPrecision <= num) {
             num -= currPrecision;
             bits |= currPrecision;
         }
@@ -140,6 +139,7 @@ unsigned int A429::encodeAltitude(float num)  {
 
 unsigned int A429::encodeClimbingRate(float num)  { 
     unsigned int bits = 0;
+    if (num < 0) num *= -1;
 
     int val = int(num / 100);
     float tmpNum = num - 100*val;
@@ -154,9 +154,8 @@ unsigned int A429::encodeClimbingRate(float num)  {
     bits |= (int(val) << 4);
 
     val = int(tmpNum*10);
-    tmpNum -= val * 0.1;
     bits |= (int(val));
-    
+
     return bits << 10;
 }
 
@@ -199,6 +198,6 @@ char* A429::translateSend(a429_request request)
             bits |= 0xFFFFFFFF;
             break;
     }
-    sprintf(sendRequest, "%X", bits);
+    sprintf(sendRequest, "%08X", bits);
     return sendRequest;
 }

@@ -28,14 +28,14 @@ int main(int argc, char const* argv[]) {
                         planeState->setNewAltitudeTarget(requestsPtr[itr].data2);
                         break;
                     case 2:
-                        if (requestsPtr[itr].ssm == 0x11){
+                        if (requestsPtr[itr].ssm == 3){
                             planeState->setClimbingSpeed(requestsPtr[itr].data1);
                         } else {
                             planeState->setClimbingSpeed(-1 * requestsPtr[itr].data1);
                         }
                         break;
                     case 3:
-                        if (requestsPtr[itr].ssm == 0x11){
+                        if (requestsPtr[itr].ssm == 3){
                             planeState->setAngle(requestsPtr[itr].data1);
                         } else {
                             planeState->setAngle(-1 * requestsPtr[itr].data1);
