@@ -6,17 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/a429_lib.cpp
-a429_lib.h
-/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/a429_lib.h
-iostream
--
+/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/plane.cpp
+plane.h
+/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/plane.h
 
-/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/a429_lib.h
+/mnt/c/Users/workbot/Documents/AER8500/Project_AER8500_H23/CMakeProjectAER/plane.h
 math.h
 -
 stdio.h
--
-string.h
 -
 

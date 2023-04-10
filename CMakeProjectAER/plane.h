@@ -13,12 +13,7 @@ class Plane {
   public:
     Plane();
     void update(unsigned long refreshRate);
-    void setNewAltitudeTarget(int newAltitude);
-    void setNewSpeedTarget(float newSpeed);
-    void setNewAngleTarget(float newAngle);
-    void setNewMotorSpeedTarget(float newSpeed);
     void setAltitude(int newAltitude);
-    void setMotorPower(int newPower);
     void setClimbingSpeed(float newSpeed);
     void setAngle(float newAngle);
     void setState(State newState);
@@ -29,15 +24,18 @@ class Plane {
     State getState();
   private:
     int   altitude;
-    int   motorPower;
-    float climbingSpeed;
-    float angleOfAttack;
     int   targetAltitude;
-    float targetClimbingSpeed;
-    float targetAngleOfAttack;
-    float targetMotorSpeed;
+    float motorPower;
+    float climbingRate;
+    float angleOfAttack;
     State state;
+    bool  freeFall;
+    bool  targetSet;
     static const float         FEET_PER_METER;
     static const int           SECONDS_PER_MIN;
     static const unsigned long NS_PER_SECOND;
+    static const unsigned long SPEED_INCR_W_POWER;
+    static const float         ACCELERATION;
+    void  refreshAltitude(unsigned long refreshRate);
+    void  refreshAngleAndSpeedSmooth();
 };

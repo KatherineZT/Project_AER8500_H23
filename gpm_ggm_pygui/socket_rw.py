@@ -24,8 +24,6 @@ def recv_cmd(window):
     num_packets = int(data_size / 8)
     packets = []
 
-    updated_alt = 0
-
     for itr in range(num_packets):
         packets += [data[itr*8:itr*8+8]]
 

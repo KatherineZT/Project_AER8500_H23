@@ -10,6 +10,7 @@ class Refresher {
     ~Refresher();
     void   UpdatePlane(unsigned long refreshRate);
     static const unsigned long INTERVAL;
+    static const unsigned long INTERVAL_NS;
   private:
     void   StartPeriodicTimer();
     SocketRW* sender;

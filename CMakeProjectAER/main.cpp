@@ -25,7 +25,7 @@ int main(int argc, char const* argv[]) {
             for (int itr = 0; itr < 10; itr++) {
                 switch (requestsPtr[itr].label) {
                     case 1:
-                        planeState->setNewAltitudeTarget(requestsPtr[itr].data2);
+                        planeState->setAltitude(requestsPtr[itr].data2);
                         break;
                     case 2:
                         if (requestsPtr[itr].ssm == 3){
@@ -40,9 +40,6 @@ int main(int argc, char const* argv[]) {
                         } else {
                             planeState->setAngle(-1 * requestsPtr[itr].data1);
                         }
-                        break;
-                    case 4:
-                        planeState->setMotorPower(requestsPtr[itr].data1);
                         break;
                     default:
                         break;
