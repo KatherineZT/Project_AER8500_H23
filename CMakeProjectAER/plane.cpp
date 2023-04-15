@@ -8,7 +8,7 @@ const float         Plane::FEET_PER_METER     = 3.2808;
 const int           Plane::SECONDS_PER_MIN    = 60;
 const unsigned long Plane::NS_PER_SECOND      = 1000000000;
 const unsigned long Plane::SPEED_INCR_W_POWER = 10;
-const float         Plane::ACCELERATION       = 9.8;
+const float         Plane::ACCELERATION       = 588.6; // speed (in m/min) lost after 1 second when a=9.81m/s^2
 
 const int   MIN_ALTITUDE = 0;
 const int   MAX_ALTITUDE = 40000;
@@ -150,7 +150,7 @@ void Plane::refreshAltitude(unsigned long refreshRate) {
 
 void Plane::refreshAngleAndSpeedSmooth() {
     float delta_altitude = static_cast<float>(abs(this->targetAltitude - this->altitude));
-    float dir = (this->targetAltitude - this->altitude > 1) ? 1.0 : -1.0;
+    float dir = (this->targetAltitude - this->altitude > 0) ? 1.0 : -1.0;
     printf("delta altitude: %f\n", delta_altitude);
     if (delta_altitude > 5000) this->climbingRate = dir * MAX_CLIMBING_RATE;
     else this->climbingRate = dir * 93.93 * log(delta_altitude);
