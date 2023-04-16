@@ -4,10 +4,11 @@
 py -m pip install -r requirements.txt
 ```
 
-### Run
+### Run (cmake project should be already started)
 
 ```
-py -m gui_app.py
+cd .\gpm\
+py gui_app.py
 ```
 
 ### Doc on PySimpleGUI

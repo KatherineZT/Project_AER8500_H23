@@ -1,1 +1,0 @@
-// do error detect in new commands here
